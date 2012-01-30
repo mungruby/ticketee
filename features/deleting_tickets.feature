@@ -3,9 +3,13 @@ Feature: Deleting tickets
   As a user
   I want to press a button and make them disappear
 
-  Background: 
+  Background:
+    Given there are the following users:
+      | email             | password |
+      | user@ticketee.com | password |
+    And I am signed in as them 
     Given there is a project called "TextMate 2"
-    And that project has a ticket:
+	And "user@ticketee.com" has created a ticket for this project:
       | title           | description                   |
       |  Make it shiny! | Gradients! Starbursts! Oh my! |
     Given I am on the homepage
