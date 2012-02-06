@@ -1,19 +1,16 @@
 Ticketee::Application.routes.draw do
 
   devise_for :users, :controllers => {:registrations => 'registrations'}
-  get 'awaiting_confirmation',
-    :to => 'users#confirmation',
-    :as => 'confirm_user'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
   
-  root :to => "projects#index"
+  root :to => 'projects#index'
   
   resources :projects do
     resources :tickets
   end
-
+  
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
@@ -69,7 +66,17 @@ Ticketee::Application.routes.draw do
   # match ':controller(/:action(/:id(.:format)))'
 
   namespace :admin do
-    root :to => 'base#index' 
-    resources :users
-  end
+    root :to => 'base#index'
+    resources :users do
+      resources :permissions
+    end
+  end  
+
+  get 'awaiting_confirmation',
+    :to => 'users#confirmation',
+    :as => 'confirm_user'
+      
+  put '/admin/users/:user_id/permissions', 
+    :to => 'admin/permissions#update',
+    :as => :update_user_permissions  
 end
