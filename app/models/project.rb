@@ -1,4 +1,5 @@
-class Project < ActiveRecord::Base 
+class Project < ActiveRecord::Base
+   
   has_many :tickets, :dependent => :delete_all
   has_many :permissions, :as => :thing
   
