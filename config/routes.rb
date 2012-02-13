@@ -76,6 +76,7 @@ Ticketee::Application.routes.draw do
     resources :users do
       resources :permissions
     end
+    resources :states
   end  
 
   get 'awaiting_confirmation',
