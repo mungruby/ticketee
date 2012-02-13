@@ -1,11 +1,12 @@
 class CommentsController < ApplicationController
+  
    before_filter :authenticate_user!
    before_filter :find_ticket
 
    def create
-     #if cannot?(:"change states", @ticket.project)
-    #   params[:comment].delete(:state_id)
-    # end
+     if cannot? :'change states', @ticket.project
+       params[:comment].delete :state_id
+     end
      @comment = @ticket.comments.build(params[:comment].merge(:user => current_user))
      if @comment.save
        #if can?(:tag, @ticket.project) || current_user.admin?
