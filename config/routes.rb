@@ -14,7 +14,8 @@ Ticketee::Application.routes.draw do
   resources :tickets do
     resources :comments
   end
-    
+  
+
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
@@ -76,8 +77,10 @@ Ticketee::Application.routes.draw do
     resources :users do
       resources :permissions
     end
-    resources :states
-  end  
+    resources :states do
+      member { get :make_default }
+    end
+end  
 
   get 'awaiting_confirmation',
     :to => 'users#confirmation',
