@@ -18,12 +18,13 @@ describe CommentsController do
     before { sign_in :user, user }
 
     it "cannot transition a state by passing through state_id" do
-      post :create, {  
+      
+      post :create, { :tags => '', 
                       :comment => { :text => "Hacked!",
                                     :state_id => state.id },
                       :ticket_id => ticket.id }
       ticket.reload
-      ticket.state.should eql(nil)
+      ticket.state.should eql nil
     end
     
   end
