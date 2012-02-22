@@ -18,8 +18,17 @@ When /^I log into gmail with:$/ do |table|
 end
 
 Then /^there should be an email from Ticketee in my inbox$/ do
-  @mails = @gmail.inbox.find(:unread, 
-            :from => "ticketee@gmail.com") do |mail|
+
+#   @mails = @gmail.inbox.find(:unread, 
+#            :from => "ticketee@gmail.com") do |mail|
+#    if mail.message.subject =~ /^\[ticketee\]/
+#      mail.delete!
+#      @received_mail = true
+#    end
+#  end
+
+   @gmail.inbox.find(:unread, 
+            :from => "ticketee@gmail.com").each do |mail|
     if mail.message.subject =~ /^\[ticketee\]/
       mail.delete!
       @received_mail = true
