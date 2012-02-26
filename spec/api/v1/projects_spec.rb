@@ -21,7 +21,6 @@ describe "/api/v1/projects", type: :api do
     it "JSON" do
       
       get "#{url}.json", :token => token
-      # get "#{url}.json"
 
       projects_json = Project.for(user).all.to_json
       last_response.body.should eql projects_json
@@ -45,4 +44,113 @@ describe "/api/v1/projects", type: :api do
       projects.css("project name").text.should eql("Ticketee")
     end
   end  
+
+  
+  # CREATE
+  context "creating a project" do
+    #before do
+    #  user.admin = true
+    #  user.save
+    #end
+
+    let(:url) { '/api/v1/projects' }
+
+    it "sucessful JSON" do     
+      post "#{url}.json", token: token, project: {name: 'Inspector'}
+      project = Project.find_by_name 'Inspector'
+      route = "/api/v1/projects/#{project.id}"
+
+      last_response.status.should eql 201
+      last_response.headers['Location'].should eql route
+      last_response.body.should eql project.to_json
+    end
+    
+    it "unsuccessful JSON" do      
+      post "#{url}.json", token: token, project: {}
+      last_response.status.should eql 422
+      errors = {"name" => ["can't be blank"]}.to_json
+      last_response.body.should eql errors
+    end
+  end
+
+
+  # SHOW  
+  context "show" do
+    
+    let(:url) { "/api/v1/projects/#{@project.id}"}
+
+    before do
+      Factory(:ticket, :project => @project)
+    end
+
+    it "JSON" do
+      pending
+      get "#{url}.json", :token => token
+      project = @project.to_json(:methods => "last_ticket")
+      last_response.body.should eql(project)
+      last_response.status.should eql(200)
+
+      project_response = JSON.parse(last_response.body)["project"]
+
+      ticket_title = project_response["last_ticket"]["ticket"]["title"]
+      ticket_title.should_not be_blank
+    end
+  end
+
+
+  # UPDATE  
+  context "updating a project" do
+    before do
+      user.admin = true
+      user.save
+    end
+
+    let(:url) { "/api/v1/projects/#{@project.id}" }
+    
+    it "successful JSON" do
+      pending
+      @project.name.should eql("Ticketee")
+      put "#{url}.json", :token => token,
+                          :project => { 
+                            :name => "Not Ticketee"
+                          }
+      last_response.status.should eql(200)
+
+      @project.reload
+      @project.name.should eql("Not Ticketee")
+      last_response.body.should eql("{}")
+    end
+    
+    it "unsuccessful JSON" do
+      pending
+      @project.name.should eql("Ticketee")
+      put "#{url}.json", :token => token,
+                          :project => { 
+                            :name => ""
+                          }
+      last_response.status.should eql(422)
+
+      @project.reload
+      @project.name.should eql("Ticketee")
+      errors = { :name => ["can't be blank"]}
+      last_response.body.should eql(errors.to_json)
+    end
+  end
+
+
+  # DELETE  
+  context "deleting a project" do
+    before do
+      user.admin = true
+      user.save
+    end
+
+    let(:url) { "/api/v1/projects/#{@project.id}" }
+    
+    it "JSON" do
+      pending
+      delete "#{url}.json", :token => token
+      last_response.status.should eql(200)
+    end
+  end
 end

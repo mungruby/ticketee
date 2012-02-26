@@ -7,18 +7,18 @@ class Api::V1::ProjectsController < Api::V1::BaseController
     respond_with Project.for(current_user)
   end
 
-  #def show
-  #  respond_with(@project, :methods => "last_ticket")
-  #end
+  def show
+    respond_with @project, methods: 'last_ticket'
+  end
   
-  #def create
-  #  project = Project.create(params[:project])
-  #  if project.valid?
-  #    respond_with(project, :location => api_v1_project_path(project))
-  #  else
-  #    respond_with(project)
-  #  end
-  #end
+  def create
+    project = Project.create params[:project]
+    if project.valid?
+      respond_with project, location: api_v1_project_path(project)
+    else
+      respond_with project
+    end
+  end
   
   #def update
   #  @project.update_attributes(params[:project])
