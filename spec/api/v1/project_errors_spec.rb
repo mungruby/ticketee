@@ -16,15 +16,12 @@ describe "Project API errors", type: :api do
     end
     
     it "cannot view projects they do not have access to" do
-      pending
-      project = Factory(:project)
+      project = Factory :project
+      get "/api/v1/projects/#{project.id}.json", token: user.authentication_token
+      error = { error: "The project you were looking for could not be found." }
 
-      get "/api/v1/projects/#{project.id}.json", 
-        :token => user.authentication_token
-      error = { :error => "The project you were looking for" +
-                          " could not be found." }
-      last_response.status.should eql(404)
-      last_response.body.should eql(error.to_json)
+      last_response.status.should eql 404 
+      last_response.body.should eql error.to_json
     end
   end
 end
