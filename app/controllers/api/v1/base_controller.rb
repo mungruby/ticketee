@@ -1,7 +1,6 @@
 class Api::V1::BaseController < ActionController::Base
   
-  respond_to :json
-  # respond_to :json, :xml
+  respond_to :json, :xml
   
   before_filter :authenticate_user
   # before_filter :check_rate_limit
