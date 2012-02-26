@@ -1,4 +1,10 @@
 Ticketee::Application.routes.draw do
+  
+  namespace :api do
+    namespace :v1 do
+      resources :projects
+    end
+  end
 
   devise_for :users, :controllers => {:registrations => 'registrations'}
 
@@ -88,14 +94,17 @@ Ticketee::Application.routes.draw do
   resources :files
 
   namespace :admin do
+    
     root :to => 'base#index'
+    
     resources :users do
       resources :permissions
     end
+    
     resources :states do
       member { get :make_default }
     end
-end  
+  end  
 
   get 'awaiting_confirmation',
     :to => 'users#confirmation',
@@ -104,4 +113,5 @@ end
   put '/admin/users/:user_id/permissions', 
     :to => 'admin/permissions#update',
     :as => :update_user_permissions  
+
 end
