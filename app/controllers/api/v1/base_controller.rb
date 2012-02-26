@@ -19,7 +19,7 @@ class Api::V1::BaseController < ActionController::Base
         if !@current_user.admin?
           error = { :error => "You must be an admin to do that." }
           # warden.custom_failure!
-          render params[:format].to_sym => error, :status => 401
+          render params[:format].to_sym => error, status: 401
         end
       end
     end
