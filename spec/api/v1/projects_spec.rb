@@ -11,15 +11,10 @@ describe "/api/v1/projects", type: :api do
   end
   
   context "projects viewable by this user" do
-    
-    before do
-      Factory :project, name: 'Access denied'
-    end
+    let(:url) { "/api/v1/projects" }    
+    before { Factory :project, name: 'Access denied' }
 
-    let(:url) { "/api/v1/projects" }
-      
     it "JSON" do
-      
       get "#{url}.json", :token => token
 
       projects_json = Project.for(user).all.to_json
@@ -48,13 +43,11 @@ describe "/api/v1/projects", type: :api do
   
   # CREATE
   context "creating a project" do
-    
+    let(:url) { '/api/v1/projects' }
     before do
       user.admin = true
       user.save
     end
-
-    let(:url) { '/api/v1/projects' }
 
     it "sucessful JSON" do     
       post "#{url}.json", token: token, project: {name: 'Inspector'}
@@ -76,23 +69,17 @@ describe "/api/v1/projects", type: :api do
 
 
   # SHOW  
-  context "show" do
-    
-    let(:url) { "/api/v1/projects/#{@project.id}"}
-
-    before do
-      Factory(:ticket, :project => @project)
-    end
+  context "show" do   
+    let(:url) { "/api/v1/projects/#{@project.id}" }
+    before { Factory :ticket, project: @project }
 
     it "JSON" do
-      pending
-      get "#{url}.json", :token => token
-      project = @project.to_json(:methods => "last_ticket")
-      last_response.body.should eql(project)
-      last_response.status.should eql(200)
+      get "#{url}.json", token: token
+      project = @project.to_json methods: 'last_ticket'
+      last_response.body.should eql project
+      last_response.status.should eql 200
 
       project_response = JSON.parse(last_response.body)["project"]
-
       ticket_title = project_response["last_ticket"]["ticket"]["title"]
       ticket_title.should_not be_blank
     end
