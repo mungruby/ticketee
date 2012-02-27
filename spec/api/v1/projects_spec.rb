@@ -119,17 +119,15 @@ describe "/api/v1/projects", type: :api do
 
   # DELETE  
   context "deleting a project" do
+    let(:url) { "/api/v1/projects/#{@project.id}" }
     before do
       user.admin = true
       user.save
     end
-
-    let(:url) { "/api/v1/projects/#{@project.id}" }
     
     it "JSON" do
-      pending
-      delete "#{url}.json", :token => token
-      last_response.status.should eql(200)
+      delete "#{url}.json", token: token
+      last_response.status.should eql 200
     end
   end
 end
