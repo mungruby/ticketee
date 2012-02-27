@@ -3,7 +3,7 @@ class Api::V1::BaseController < ActionController::Base
   respond_to :json, :xml
   
   before_filter :authenticate_user
-  # before_filter :check_rate_limit
+  before_filter :check_rate_limit
 
   private
   
@@ -31,9 +31,9 @@ class Api::V1::BaseController < ActionController::Base
     def check_rate_limit
       if @current_user.request_count > 100
         error = { :error => "Rate limit exceeded." }
-        respond_with(error, :status => 403)
+        respond_with error, status: 403
       else
-        @current_user.increment!(:request_count)
+        @current_user.increment! :request_count
       end
     end
     
