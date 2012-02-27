@@ -20,10 +20,10 @@ class Api::V1::ProjectsController < Api::V1::BaseController
     end
   end
   
-  #def update
-  #  @project.update_attributes(params[:project])
-  #  respond_with(@project)
-  #end
+  def update
+    @project.update_attributes params[:project]
+    respond_with @project
+  end
   
   #def destroy
   #  @project.destroy

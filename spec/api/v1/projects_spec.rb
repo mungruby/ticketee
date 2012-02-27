@@ -88,21 +88,16 @@ describe "/api/v1/projects", type: :api do
 
   # UPDATE  
   context "updating a project" do
+    let(:url) { "/api/v1/projects/#{@project.id}" }
     before do
       user.admin = true
       user.save
     end
-
-    let(:url) { "/api/v1/projects/#{@project.id}" }
     
     it "successful JSON" do
-      pending
-      @project.name.should eql("Ticketee")
-      put "#{url}.json", :token => token,
-                          :project => { 
-                            :name => "Not Ticketee"
-                          }
-      last_response.status.should eql(200)
+      @project.name.should eql 'Ticketee'
+      put "#{url}.json", token: token, project: { name: 'Not Ticketee' }
+      last_response.status.should eql 200
 
       @project.reload
       @project.name.should eql("Not Ticketee")
@@ -110,18 +105,14 @@ describe "/api/v1/projects", type: :api do
     end
     
     it "unsuccessful JSON" do
-      pending
-      @project.name.should eql("Ticketee")
-      put "#{url}.json", :token => token,
-                          :project => { 
-                            :name => ""
-                          }
-      last_response.status.should eql(422)
+      @project.name.should eql 'Ticketee'
+      put "#{url}.json", token: token, project: { name: "" }
+      last_response.status.should eql 422 
 
       @project.reload
-      @project.name.should eql("Ticketee")
-      errors = { :name => ["can't be blank"]}
-      last_response.body.should eql(errors.to_json)
+      @project.name.should eql 'Ticketee'
+      errors = { name: ["can't be blank"] }
+      last_response.body.should eql errors.to_json
     end
   end
 
